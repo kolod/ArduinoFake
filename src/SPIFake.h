@@ -5,6 +5,7 @@
 
 struct SPIFake {
   virtual uint8_t transfer(uint8_t data) = 0;
+  virtual uint16_t transfer16(uint16_t data) = 0;
   virtual void transfer(void *buf, size_t count) = 0;
 
   virtual void beginTransaction(SPISettings settings) = 0;
