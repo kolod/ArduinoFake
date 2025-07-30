@@ -12,13 +12,13 @@ on:
       - master
 
 jobs:
-  build:
+  cmake-build:
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout
@@ -41,36 +41,6 @@ jobs:
       - name: Test
         run: ctest --test-dir ${{ github.workspace }}/build --output-on-failure
 
-  examples:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-22.04]
-        example: [mock-injection, wiring-blink]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Cache PlatformIO
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/pip
-            ~/.platformio/.cache
-          key: ${{ runner.os }}-pio
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install PlatformIO Core
-        run: pip install --upgrade platformio
-
-      - name: Tests
-        run: pio test -d examples/${{ matrix.example }}/
 
   platformio-test:
     runs-on: ${{ matrix.os }}
@@ -102,9 +72,18 @@ jobs:
       - name: Tests
         run: pio test -vvv
 
+      - name: Test wiring-blink
+        run: pio test -d examples/wiring-blink/
+
+      - name: Test mock-injection
+        run: pio test -d examples/mock-injection/
+
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: platformio-test-results-${{ matrix.os }}
-          path: .pio/build/native/
+          path: 
+           - .pio/build/native/
+           - examples/wiring-blink/.pio/build/native/
+           - examples/mock-injection/.pio/build/native/
