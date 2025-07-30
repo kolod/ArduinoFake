@@ -29,10 +29,19 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install MinGW (Windows only)
+        if: runner.os == 'Windows'
+        run: choco install mingw -y
+
       - name: Check CMake version
         run: cmake --version
 
-      - name: Configure (CMake)
+      - name: Configure CMake (for Windows)
+        if: runner.os == 'Windows'
+        run: cmake ${{ github.workspace }} -B${{ github.workspace }}/build -G "MinGW Makefiles"
+
+      - name: Configure CMake (for other OS)
+        if: runner.os != 'Windows'
         run: cmake ${{ github.workspace }} -B${{ github.workspace }}/build
 
       - name: Build
