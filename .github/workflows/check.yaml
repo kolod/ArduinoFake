@@ -106,5 +106,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: platformio-test-results
+          name: platformio-test-results-${{ matrix.os }}
           path: .pio/build/native/
