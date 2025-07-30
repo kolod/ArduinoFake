@@ -18,9 +18,28 @@ namespace ArduinoContextTest
         ArduinoFakeContext* context = getArduinoFakeContext();
         ArduinoFakeInstances* instances = context->Instances;
 
+        // Broke pointers for testing purposes
+        context->Instances->Serial = nullptr;
+        context->Instances->SPI = nullptr;
+
+        TEST_ASSERT_NULL(context->Instances->Serial);
+        TEST_ASSERT_NULL(context->Instances->SPI);
+
         ArduinoFakeReset();
 
-        TEST_ASSERT_NOT_EQUAL(context->Instances, instances);
+        // After reset, a new instance of ArduinoFakeInstances should be created
+        // and the previous instance should be deleted.
+        // The Serial and SPI instances should also be reset to nullptr.
+        TEST_ASSERT_NOT_NULL(context->Instances);
+        TEST_ASSERT_NOT_NULL(context->Instances->Serial);
+        TEST_ASSERT_NOT_NULL(context->Instances->SPI);
+
+        // A simple pointer comparison like TEST_ASSERT_NOT_EQUAL(context->Instances, instances); 
+        // is not a reliable way to check if a new instance was created, because 
+        // memory allocators can reuse the same address for new objects after deletion. 
+        // This means a new instance could be created at the same memory location as the old one, 
+        // causing the test to fail even though the instance is actually new. 
+        // To properly verify a new instance, you should check object identity or state, not just pointer values.
     }
 
     void test_function_mock(void)
