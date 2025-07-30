@@ -1,6 +1,14 @@
 name: Check
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
 
 jobs:
   build:
@@ -8,11 +16,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04]
+        os: [ubuntu-22.04, windows-latest]
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       -
         name: Tests
         run: make
@@ -27,7 +35,7 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       -
         uses: actions/cache@v3
         with:
@@ -43,5 +51,8 @@ jobs:
         name: Install PlatformIO Core
         run: pip install --upgrade platformio
       -
-        name: Tests
+        name: Build example
         run: pio test -d examples/wiring-blink/
+      -
+        name: Build Tests
+        run: pio test
