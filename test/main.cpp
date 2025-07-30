@@ -29,6 +29,12 @@ void setUp(void)
     ArduinoFakeReset();
 }
 
+void tearDown(void)
+{
+    // No specific teardown actions needed
+    // Needed for building on Windows hosts
+}
+
 int main(int argc, char **argv)
 {
     UNITY_BEGIN();
