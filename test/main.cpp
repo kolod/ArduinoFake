@@ -29,6 +29,11 @@ void setUp(void)
     ArduinoFakeReset();
 }
 
+void tearDown(void)
+{
+    // Nothing to do here
+}
+
 int main(int argc, char **argv)
 {
     UNITY_BEGIN();
@@ -46,9 +51,7 @@ int main(int argc, char **argv)
     RUN_TEST_GROUP(ClientTest);
     RUN_TEST_GROUP(IncludeTest);
 
-    UNITY_END();
-
-    return 0;
+    return UNITY_END();
 }
 
 #endif
