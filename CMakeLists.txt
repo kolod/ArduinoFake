@@ -21,6 +21,11 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(fakeit_repo)
 FetchContent_MakeAvailable(unity_repo)  
 
+# Add -Wa,-mbig-obj for MinGW compiler (Windows GCC)
+if(MINGW)
+    add_compile_options(-Wa,-mbig-obj)
+endif()
+
 # Include external libs
 add_library(fakeit STATIC
     ${unity_repo_SOURCE_DIR}/src/unity.c
