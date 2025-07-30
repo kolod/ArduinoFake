@@ -83,7 +83,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: platformio-test-results-${{ matrix.os }}
-          path: 
-           - .pio/build/native/
-           - examples/wiring-blink/.pio/build/native/
-           - examples/mock-injection/.pio/build/native/
+          path: .pio/build/native/
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: platformio-wiring-blink-results-${{ matrix.os }}
+          path: examples/wiring-blink/.pio/build/native/
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: platformio-mock-injection-results-${{ matrix.os }}
+          path: examples/mock-injection/.pio/build/native/
