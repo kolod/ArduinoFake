@@ -1,18 +1,18 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.11)
 project(fakeit VERSION 2.4.0 LANGUAGES CXX)
 
-include(git-download)
+include(FetchContent)
 
-set(REPO_DIR ${PROJECT_SOURCE_DIR}/${PROJECT_NAME}-repo)
-
-download_repo(
-    URL "https://github.com/eranpeer/FakeIt.git"
-    TAG ${PROJECT_VERSION}
-    CLONE_DIR ${REPO_DIR}
+FetchContent_Declare(
+    fakeit_repo
+    GIT_REPOSITORY https://github.com/eranpeer/FakeIt.git
+    GIT_TAG        ${PROJECT_VERSION}
 )
+
+FetchContent_MakeAvailable(fakeit_repo)
 
 add_library(${PROJECT_NAME} INTERFACE)
 
 target_include_directories(${PROJECT_NAME} INTERFACE
-    ${REPO_DIR}/single_header/standalone/
+    ${fakeit_repo_SOURCE_DIR}/single_header/standalone/
 )

@@ -1,20 +1,20 @@
-cmake_minimum_required(VERSION 3.2.2)
+cmake_minimum_required(VERSION 3.11)
 project(unity VERSION 2.4.1 LANGUAGES C)
 
-include(git-download)
+include(FetchContent)
 
-set(REPO_DIR ${PROJECT_SOURCE_DIR}/${PROJECT_NAME}-repo)
-
-download_repo(
-    URL "https://github.com/ThrowTheSwitch/Unity.git"
-    TAG v${PROJECT_VERSION}
-    CLONE_DIR ${REPO_DIR}
+FetchContent_Declare(
+    unity_repo
+    GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
+    GIT_TAG        v${PROJECT_VERSION}
 )
 
+FetchContent_MakeAvailable(unity_repo)
+
 add_library(${PROJECT_NAME} STATIC
-    ${REPO_DIR}/src/unity.c
+    ${unity_repo_SOURCE_DIR}/src/unity.c
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${REPO_DIR}/src
+    ${unity_repo_SOURCE_DIR}/src
 )
