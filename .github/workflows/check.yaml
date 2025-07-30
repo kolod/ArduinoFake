@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - cmake-fetch
   pull_request: 
     branches:
       - main
